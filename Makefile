@@ -26,15 +26,6 @@ seed-products:
 seed-products-clear:
 	@docker compose -f api/compose.yml exec api uv run python -m src.infrastructure.cli.main seed products --clear
 
-seed-clear:
-	@docker compose -f api/compose.yml exec api uv run python -m src.infrastructure.cli.main seed clear
-
-seed-reset:
-	@docker compose -f api/compose.yml exec api uv run python -m src.infrastructure.cli.main seed reset
-
-logs-api:
-	@docker compose -f api/compose.yml logs -f api
-
 build-frontend:
 	@cd front/product-app && npm install && npm run build
 
