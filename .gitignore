@@ -1,0 +1,10 @@
+# api
+*/.venv/
+*/.env
+__pycache__/
+.pytest_cache/
+htmlcov/
+.coverage
+# front
+dist/
+node_modules/

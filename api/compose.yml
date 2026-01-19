@@ -1,0 +1,44 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: stoq_project
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+    networks:
+      - stoq_project_network
+
+  # Fake Twitter API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stoq_project_api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/stoq_project
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - db
+    networks:
+      - stoq_project_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  stoq_project_network:
+    driver: bridge
